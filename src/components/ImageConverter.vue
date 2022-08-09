@@ -5,13 +5,13 @@ import Dropdown from 'primevue/dropdown';
 import Slider from 'primevue/slider';
 import FileUpload, {FileUploadUploaderEvent} from 'primevue/fileupload';
 
-const selectedFormat = ref("jpg");
 const formats = [
-  {name: 'JPG', code: 'jpg'},
+  {name: 'JPG', code: 'jpeg'},
   {name: 'PNG', code: 'png'},
   {name: 'WebP', code: 'webp'},
 ];
 
+const selectedFormat = ref(formats[0]);
 const quality = ref(85);
 
 const imageConverter = async (event: FileUploadUploaderEvent) => {
@@ -21,14 +21,28 @@ const imageConverter = async (event: FileUploadUploaderEvent) => {
   const image = await helpers.loadImageFromUrl(dataUrl);
   const canvas = await helpers.createCanvasFromImage(image);
 
-  const resultDataUrl = canvas.toDataURL(`image/${selectedFormat.value}`, quality.value / 100.0);
-  resultDataUrl
+  const resultDataUrl = canvas.toDataURL(`image/${selectedFormat.value.code}`, quality.value / 100.0);
+  const fileName = helpers.changeExtension(file.name, selectedFormat.value.code);
+
+  helpers.downloadDataUrl(resultDataUrl, fileName);
 };
 </script>
 
 <template>
-  <Dropdown v-model="selectedFormat" :options="formats" optionLabel="name" placeholder="Select format" />
-  <Slider v-model="quality" :min="0" :max="100" />
+  <div class="flex flex-row flex-wrap">
+    <div class="flex align-items-center justify-content-center"></div>
+    <div class="flex align-items-center"></div>
+  </div>
+  <div class="card py-6">
+    <div class="card-container">
+      <div class="inline-block">
+        <Dropdown v-model="selectedFormat" :options="formats" optionLabel="name" placeholder="Select format" />
+      </div>
+      <div class="inline-block">
+        <Slider v-model="quality" :min="0" :max="100" />
+      </div>
+    </div>
+  </div>
 
   <FileUpload name="images[]" :customUpload="true" @uploader="imageConverter"/>
 </template>

@@ -34,3 +34,18 @@ export const createCanvasFromImage = (image: HTMLImageElement): HTMLCanvasElemen
 
     return canvas;
 };
+
+export const downloadDataUrl = (url: string, name: string) => {
+    const link = document.createElement("a");
+    link.download = name;
+    link.href = url;
+    link.click();
+};
+
+export const changeExtension = (name: string, extension: string) => {
+    const parts = name.split(".");
+    if (parts.length > 1)
+        parts.pop();
+
+    return [...parts, extension].join(".");
+};
