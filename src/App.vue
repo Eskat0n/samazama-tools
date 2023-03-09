@@ -1,9 +1,26 @@
 <script setup lang="ts">
-// This starter template is using Vue 3 <script setup> SFCs
-// Check out https://vuejs.org/api/sfc-script-setup.html#script-setup
-import ImageConverter from './components/ImageConverter.vue'
+import features, {IFeature} from "./routes/features";
+
+const featureByCategory = features.reduce<Record<string, IFeature[]>>((acc, feature) => {
+  const category = feature.category;
+  if (!category)
+    return acc;
+
+  if (!acc[category])
+    acc[category] = [];
+  acc[category].push(feature);
+
+  return acc;
+}, {});
+const items = Object.keys(featureByCategory).map(category => ({
+  label: category,
+  items: featureByCategory[category].map(feature => ({
+    label: feature.name,
+    to: feature.path,
+  })),
+}));
 </script>
 
 <template>
-  <ImageConverter />
+  <router-view></router-view>
 </template>

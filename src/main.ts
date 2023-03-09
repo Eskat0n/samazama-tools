@@ -1,10 +1,10 @@
-import {createApp} from 'vue'
-import PrimeVue from 'primevue/config'
-import 'primevue/resources/themes/saga-blue/theme.css'
-import 'primevue/resources/primevue.min.css'
-import 'primeicons/primeicons.css'
-import App from './App.vue'
+import {createApp} from "vue";
+import Antd from "ant-design-vue";
+import App from "./App.vue";
+import router from "./routes/router";
+import "ant-design-vue/dist/antd.css";
 
 createApp(App)
-    .use(PrimeVue)
-    .mount('#app')
+    .use(Antd)
+    .use(router)
+    .mount("#app")
